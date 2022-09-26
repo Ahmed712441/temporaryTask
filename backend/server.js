@@ -14,9 +14,13 @@ app.use(express.static('build'))
 
 
 app.post('/check-info',(req,res)=>{
-    axios.get(ApiUrl+req.body.visa).then((response)=>{
-        res.json(response.data)
-    })
+    if(req.body.visa){
+        axios.get(ApiUrl+req.body.visa).then((response)=>{
+            res.json(response.data)
+        }).catch((err)=> res.json({'error':'bin doesn\'t exists'}))
+    }else{
+        res.json({'error':'you need to enter a bin'})
+    }
 })
 
 app.use('*',(req,res)=> res.sendFile(path.join(__dirname,'build','index.html')))
