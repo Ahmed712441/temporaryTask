@@ -13,7 +13,7 @@ function App() {
     var output ='{'
     for(var i = 0;i<keys.length;i++){
       output+= '\n\n\t\t'
-      output += keys[i] + ' : '
+      output += '"'+keys[i] + '" : '
       output += reformat(obj[keys[i]])
       output += ','
     }
@@ -41,7 +41,9 @@ function App() {
       body: JSON.stringify(data)
     })
     const cardinfo = await response.json();
-    setInfo(reformat(cardinfo));
+    var reformated = reformat(cardinfo);
+    reformated = reformated.slice(0,reformated.length-3) + '}'
+    setInfo(reformated);
   }
   
   return (
