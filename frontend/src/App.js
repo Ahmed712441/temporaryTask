@@ -5,22 +5,30 @@ import { useState } from 'react';
 
 function App() {
   
-  function reformat(obj){
+  function reformat(obj,level){
     if(! (typeof obj === 'object' && obj !== null ) ){
       return obj
     }
     const keys = Object.keys(obj);
     var output ='{'
     for(var i = 0;i<keys.length;i++){
-      output+= '\n\n\t\t'
+      output+= '\n\n'
+      for (var j=0;j<level;j++){
+        output+='\t'
+      }
       output += '"'+keys[i] + '" : '
-      output += reformat(obj[keys[i]])
+      output += reformat(obj[keys[i]],level+1)
       output += ','
     }
     if(output.length > 1){
       output = output.slice(0,output.length-1)
     }
-    output+= '\n\n\t\t}'
+
+    output+= '\n\n'
+    for (var j=0;j<level-1;j++){
+      output+='\t'
+    }
+    output += '}'
     return output
   }
 
@@ -41,8 +49,7 @@ function App() {
       body: JSON.stringify(data)
     })
     const cardinfo = await response.json();
-    var reformated = reformat(cardinfo);
-    reformated = reformated.slice(0,reformated.length-3) + '}'
+    var reformated = reformat(cardinfo,1);
     setInfo(reformated);
   }
   
